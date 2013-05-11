@@ -1,0 +1,27 @@
+*{
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box; /* Firefox, other Gecko */
+	box-sizing: border-box; /* Opera/IE 8+ */
+}
+
+#container {
+	width: 600px;
+	margin: 30px auto;
+}
+
+#droppable-container {
+	width: 100%;
+	background-color: #ccc;
+	min-height: 100px;
+	height: 100%;
+	border-radius: 10px;
+}
+
+#droppable-placeholder {
+	display: block;
+	padding: 30px;
+	font-size: 30px;
+	font-weight: bold;
+	margin:auto;
+	color: #fff;
+}
