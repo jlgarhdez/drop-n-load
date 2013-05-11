@@ -20,7 +20,10 @@ class window.DragAndDrop
   @files = []
 
   # This constructor binds the handler to the events
-  constructor: ->
+  constructor: (settings) ->
+
+    if typeof settings is 'object'
+      @settings = settings
 
     # Initialize the container element
     DragAndDrop.container = document.getElementById DragAndDrop.settings.droppableContainerId
@@ -73,6 +76,3 @@ class window.DragAndDrop
 
     DragAndDrop.container.style.border = "none"
     @
-
-# Instance of the class.
-dragAndDrop = new DragAndDrop
