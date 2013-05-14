@@ -1,9 +1,22 @@
 ###
-MIT License
+Copyright (c) 2013 José Luis García <jl.garhdez@gmail.com>
 
-This is a simple drop'n'upload implementation for see the power of Coffeescript
+Permission is hereby granted, free of charge, to any person obtaining a copy of 
+this software and associated documentation files (the "Software"), to deal in the 
+Software without restriction, including without limitation the rights to use, 
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
+Software, and to permit persons to whom the Software is furnished to do so, 
+subject to the following conditions:
 
-Copyright (c) 2013 José Luis García
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ###
 
 class window.DragAndDrop
@@ -44,7 +57,6 @@ class window.DragAndDrop
     DragAndDrop.container.style.border = "none"
     @
 
-
   # Drop handler
   dropHandler: (event) ->
     event.preventDefault()
@@ -52,20 +64,21 @@ class window.DragAndDrop
     # The array of files
     files = event.dataTransfer.files
 
+    console.log files
+
     # loop through the array of files
     for file in files
 
-      # check if the file is an image or not, for displaying a thumbnail
       reader = new FileReader
 
-      # This callback will be executed when the readAsDataURL operation
-      # finishes
       reader.onloadend = (event) ->
         dataUrl = this.result
 
         file.dataUrl = dataUrl
-        DragAndDrop.files.push file
 
+        window.DragAndDrop.files.push file
+
+        # check if the file is an image or not, for displaying a thumbnail
         if file.type.match 'image.*'
           img = document.createElement 'img'
           img.setAttribute 'src', dataUrl

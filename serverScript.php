@@ -13,6 +13,7 @@ $response = array();
 
 if ($success !== FALSE) {
     $response['status'] = 'success';
+    $response['filename'] = $name;
 } else {
     $response['status'] = 'error';
     $response['error'] = 'unable to write file';

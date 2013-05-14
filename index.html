@@ -23,20 +23,20 @@
 	<script type="text/javascript" charset="utf-8" src="js/upload.js"></script>
 	<script type="text/javascript" charset="utf-8">
 
+	// Initialize Upload object
 	var uploadSettings = {
 		uploadScript: 'serverScript.php',
 		files: DragAndDrop.files
 	};
-
 	window.upload = new Upload(uploadSettings);
 
+	// Initialize Drag and Drop object
 	var dragAndDropSettings = {
 		droppableContainerId: 'droppable-container',
 		borderStyleOnDragover: '6px dashed #444',
 		uploadButtonId: 'upload-button',
 		droppablePlaceholderId: 'droppable-placeholder'
 	}
-
 	window.dragAndDrop = new DragAndDrop(dragAndDropSettings);
 
 	function fire() {

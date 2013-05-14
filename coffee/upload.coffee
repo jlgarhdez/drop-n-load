@@ -13,6 +13,8 @@ class window.Upload
 
     file = Upload.settings.files[fileIndex]
 
+    parent = @
+
     formData = new FormData
     formData.append 'data', file.dataUrl.split('base64,')[1] # Get only the dataString, not the header
     formData.append 'name', file.name
@@ -21,17 +23,17 @@ class window.Upload
     xhr = new XMLHttpRequest
 
     xhr.onload = (event) ->
-      response = xhr.response
+      response = JSON.parse xhr.response
+
+      #console.log response
 
       if response.status == 'success'
-        console.log 'success'
 
         if typeof Upload.settings.files[fileIndex + 1] isnt 'undefined'
-          Upload.uploadFile files[fileIndex + 1]
+          parent.uploadFile fileIndex + 1
 
       else
         console.log "error"
-        
 
       @
 
