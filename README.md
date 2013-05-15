@@ -39,4 +39,7 @@ Instructions:
 -------------
 For generating the js files, do the following:
 
-	coffee --compile --output js/ coffee/
+```bash
+cd wherever-you-have-cloned-the-project
+coffee --compile --output js/ coffee/
+```
