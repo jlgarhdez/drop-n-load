@@ -80,11 +80,16 @@ class window.DragAndDrop
 
       file.dataUrl = dataUrl
 
+      # Add the file to the array
+      Upload.settings.files.push file
+
       fileDiv = document.createElement 'div'
 
       if file.type.match 'image.*'
         imageElement = document.createElement 'img'
         imageElement.setAttribute 'src', dataUrl
+        imageElement.setAttribute 'class', 'thumb'
+
         fileDiv.appendChild imageElement
 
       filenameElement = document.createElement 'span'

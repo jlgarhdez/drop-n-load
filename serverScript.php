@@ -1,6 +1,15 @@
 <?php
 
-define('UPLOAD_FOLDER', 'uploads/');
+class Upload {
+    const UPLOAD_FOLDER = 'uploads/';
+
+    public function __construct()
+    {
+        
+    }
+
+}
+
 
 $data = $_POST['data'];
 $name = $_POST['name'];
@@ -19,4 +28,7 @@ if ($success !== FALSE) {
     $response['error'] = 'unable to write file';
 }
 
+$upload = new Upload();
+
 echo json_encode($response);
+

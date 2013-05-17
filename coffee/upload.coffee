@@ -24,15 +24,17 @@ class window.Upload
   # This will contain all the convenience configuration for the upload class.
   @settings =
     uploadScript: 'serverScript.php'
-    files: DragAndDrop.files
+    files: []
 
   constructor: (@settings) ->
 
   # This method will handle the upload of each file
-  uploadFile: (fileIndex) ->
+  uploadFile: (fileIndex) =>
     throw Error('fileIndex must be an integer') unless typeof fileIndex is 'number'
 
     file = Upload.settings.files[fileIndex]
+
+    console.log file
 
     parent = @
 
@@ -62,3 +64,9 @@ class window.Upload
 
     xhr.send(formData)
     @
+
+  setFiles: (@files) =>
+
+  getFiles: () =>
+    @files
+
