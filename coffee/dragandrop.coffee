@@ -1,14 +1,14 @@
 ###
 Copyright (c) 2013 José Luis García <jl.garhdez@gmail.com>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of 
-this software and associated documentation files (the "Software"), to deal in the 
-Software without restriction, including without limitation the rights to use, 
-copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-Software, and to permit persons to whom the Software is furnished to do so, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in the
+Software without restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+Software, and to permit persons to whom the Software is furnished to do so,
 subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all 
+The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -64,28 +64,35 @@ class window.DragAndDrop
     # The array of files
     files = event.dataTransfer.files
 
-    console.log files
-
     # loop through the array of files
     for file in files
-
-      reader = new FileReader
-
-      reader.onloadend = (event) ->
-        dataUrl = this.result
-
-        file.dataUrl = dataUrl
-
-        window.DragAndDrop.files.push file
-
-        # check if the file is an image or not, for displaying a thumbnail
-        if file.type.match 'image.*'
-          img = document.createElement 'img'
-          img.setAttribute 'src', dataUrl
-          img.setAttribute 'style', 'width: 100px; height: 100px'
-          DragAndDrop.container.appendChild img
-
-      reader.readAsDataURL file
+      DragAndDrop.prototype.proccessFile file
 
     DragAndDrop.container.style.border = "none"
     @
+
+  # Method for processing each file 
+  proccessFile: (file) ->
+    reader = new FileReader
+
+    reader.onload = (onloadendEvent) ->
+      dataUrl = this.result
+
+      file.dataUrl = dataUrl
+
+      fileDiv = document.createElement 'div'
+
+      if file.type.match 'image.*'
+        imageElement = document.createElement 'img'
+        imageElement.setAttribute 'src', dataUrl
+        fileDiv.appendChild imageElement
+
+      filenameElement = document.createElement 'span'
+      filenameElement.innerHTML = file.name
+
+      fileDiv.appendChild filenameElement
+
+      DragAndDrop.container.appendChild fileDiv
+      @
+
+    reader.readAsDataURL file
