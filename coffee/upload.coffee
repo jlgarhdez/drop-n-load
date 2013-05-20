@@ -22,51 +22,52 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 class window.Upload
 
   # This will contain all the convenience configuration for the upload class.
-  @settings =
-    uploadScript: 'serverScript.php'
-    files: []
+  @uploadSettings =
+    uploadScript: 'serverScript.php'  # The script to send the data to
+    uploadFolder: 'uploads/'          # The uploads folder. Append the slash, plz
+    tempFolder: 'tmp/'                # Temporary folder. Append the slash, plz
+    chunkSize: 2000000                # ~2 MB
+    maxUploadSize: 2000000000         # ~2 GB
+    files: []                         # The array of File objects
 
-  constructor: (@settings) ->
+  @currentUpload =
+    chunkIndex: 0
+    tempName: null
+
+  constructor: (@uploadSettings) ->
 
   # This method will handle the upload of each file
   uploadFile: (fileIndex) =>
     throw Error('fileIndex must be an integer') unless typeof fileIndex is 'number'
-
-    file = Upload.settings.files[fileIndex]
-
-    console.log file
-
+    file = Upload.uploadSettings.files[fileIndex]
     parent = @
 
-    formData = new FormData
-    formData.append 'data', file.dataUrl.split('base64,')[1] # Get only the dataString, not the header
-    formData.append 'name', file.name
-    formData.append 'type', file.type
+    if file.size < @uploadSettings.chunkSize
+      formData = new FormData
+      formData.append 'data', file.dataUrl.split('base64,')[1] # Get only the dataString, not the header
+      formData.append 'name', file.name
+      formData.append 'type', file.type
 
-    xhr = new XMLHttpRequest
-
-    xhr.onload = (event) ->
-      response = JSON.parse xhr.response
-
-      #console.log response
-
-      if response.status == 'success'
-
-        if typeof Upload.settings.files[fileIndex + 1] isnt 'undefined'
-          parent.uploadFile fileIndex + 1
-
-      else
-        console.log "error"
-
+      xhr = new XMLHttpRequest
+      xhr.onload = (event) ->
+        response = JSON.parse xhr.response
+        if response.status == 'success'
+          if typeof Upload.uploadSettings.files[fileIndex + 1] isnt 'undefined'
+            parent.uploadFile fileIndex + 1
+        else
+          console.log "error"
+        @
+      xhr.open 'POST', this.uploadSettings.uploadScript, true
+      xhr.send(formData)
       @
+    else
+      # Calculate the number of chunks
+      # loop over this number
+      # 
 
-    xhr.open 'POST', this.settings.uploadScript, true
+  setFiles: (files) =>
+    @uploadSettings.files = files
 
-    xhr.send(formData)
-    @
-
-  setFiles: (@files) =>
-
-  getFiles: () =>
-    @files
+  getFiles: () ->
+    @uploadSettings.files
 
