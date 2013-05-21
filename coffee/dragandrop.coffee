@@ -28,9 +28,8 @@ class window.DragAndDrop
     uploadButtonId: 'upload-button'
     droppablePlaceholderId: 'droppable-placeholder'
 
+  # Reference to the droppable container
   @container = {}
-
-  @files = []
 
   # This constructor binds the handler to the events
   constructor: (settings) ->
@@ -65,9 +64,7 @@ class window.DragAndDrop
     files = event.dataTransfer.files
 
     # loop through the array of files
-    for file in files
-      DragAndDrop.prototype.proccessFile file
-
+    DragAndDrop.prototype.proccessFile file for file in files
     DragAndDrop.container.style.border = "none"
     @
 
@@ -81,7 +78,7 @@ class window.DragAndDrop
       file.dataUrl = dataUrl
 
       # Add the file to the array
-      Upload.settings.files.push file
+      upload.addFile file
 
       fileDiv = document.createElement 'div'
 
@@ -98,6 +95,9 @@ class window.DragAndDrop
       fileDiv.appendChild filenameElement
 
       DragAndDrop.container.appendChild fileDiv
+
+      ph =  document.getElementById DragAndDrop.settings.droppablePlaceholderId
+      DragAndDrop.container.removeChild ph
       @
 
     reader.readAsDataURL file

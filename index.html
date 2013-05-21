@@ -26,7 +26,11 @@
 	// Initialize Upload object
 	var uploadSettings = {
 		uploadScript: 'serverScript.php',
-		files: DragAndDrop.files
+		uploadFolder: 'uploads/',
+		tempFolder: 'tmp/',
+		chunkSize: 200000,
+		maxUploadSize: 2000000000,
+		files: []
 	};
 	window.upload = new Upload(uploadSettings);
 
