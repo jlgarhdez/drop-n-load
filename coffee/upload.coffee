@@ -105,18 +105,19 @@ class window.Upload
     @
 
   finishFileUpload: (tmpFilename) =>
-  
+
     formData = new FormData
     formData.append 'action', 'finish'
     formData.append 'tmpFilename', tmpFilename
     formData.append 'filename', @currentFileSettings.file.name
-    
+
     # move the tmpFolder file to the uploads folder
     xhr = new XMLHttpRequest
     xhr.onloadend = (event) ->
       console.log xhr.response
+      @
     xhr.open 'POST', @uploadSettings.uploadScript, false
-    xhr.send
+    xhr.send formData
 
     # clean the currentFileSettings object
     if @uploadSettings.currentFileIndex + 1 <= @uploadSettings.files.length - 1
@@ -130,6 +131,8 @@ class window.Upload
         chunkIndex: 0
         numberOfChunks: 0
         tempName: null
+
+      @uploadFile @uploadSettings.currentFileIndex
 
   addFile: (file) =>
     @uploadSettings.files.push file

@@ -96,8 +96,9 @@ class window.DragAndDrop
 
       DragAndDrop.container.appendChild fileDiv
 
-      ph =  document.getElementById DragAndDrop.settings.droppablePlaceholderId
-      DragAndDrop.container.removeChild ph
+      placeholder =  document.getElementById DragAndDrop.settings.droppablePlaceholderId
+
+      DragAndDrop.container.removeChild placeholder if placeholder isnt null
       @
 
     reader.readAsDataURL file

@@ -59,7 +59,9 @@ class Upload {
     public function moveFile($src, $dest)
     {
         $response = 'unable to move the file';
-        if (copy($src, $dest)) {
+        if (copy(
+              self::TEMP_UPLOAD_FOLDER . $src, 
+              self::UPLOAD_FOLDER . $dest)) {
             unlink($src);
             $response = 'file moved successfully';
         }
