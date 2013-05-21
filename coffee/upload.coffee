@@ -89,7 +89,6 @@ class window.Upload
         xhr = new XMLHttpRequest
         xhr.onloadend = (event) ->
           response = JSON.parse xhr.response
-          console.log response
 
           if parent.currentFileSettings.numberOfChunks > chunkIndex
             parent.uploadChunk ++chunkIndex, response.tmpFilename
