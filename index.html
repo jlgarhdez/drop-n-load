@@ -24,24 +24,22 @@
 	<script type="text/javascript" charset="utf-8">
 
 	// Initialize Upload object
-	var uploadSettings = {
+	window.upload = new Upload({
 		uploadScript: 'serverScript.php',
 		uploadFolder: 'uploads/',
 		tempFolder: 'tmp/',
 		chunkSize: 200000,
 		maxUploadSize: 2000000000,
 		files: []
-	};
-	window.upload = new Upload(uploadSettings);
+	});
 
 	// Initialize Drag and Drop object
-	var dragAndDropSettings = {
+	window.dragAndDrop = new DragAndDrop({
 		droppableContainerId: 'droppable-container',
 		borderStyleOnDragover: '6px dashed #444',
 		uploadButtonId: 'upload-button',
 		droppablePlaceholderId: 'droppable-placeholder'
-	}
-	window.dragAndDrop = new DragAndDrop(dragAndDropSettings);
+	});
 
 	function fire() {
 		upload.uploadFile(0);

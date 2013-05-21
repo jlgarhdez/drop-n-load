@@ -50,66 +50,51 @@ class window.Upload
     throw Error('fileIndex must be an integer') unless typeof fileIndex is 'number'
 
     file = @uploadSettings.files[fileIndex]
+
+    @uploadSettings.currentFileIndex = fileIndex
+
     parent = @
 
-    if file.size < @uploadSettings.chunkSize # It is not necesary to split the file
-
-      # This object holds all the elements
-      formData = new FormData
-      formData.append 'data', file.dataUrl.split('base64,')[1] # Get only the dataString, not the header
-      formData.append 'name', file.name
-      formData.append 'type', file.type
-
-      # Create the AJAX to upload the file
-      xhr = new XMLHttpRequest
-      xhr.onload = (event) ->
-        response = JSON.parse xhr.response
-        if response.status == 'success'
-          if typeof Upload.uploadSettings.files[fileIndex + 1] isnt 'undefined'
-            parent.uploadFile fileIndex + 1
-        else
-          console.log "error"
-        @
-      xhr.open 'POST', this.uploadSettings.uploadScript, true
-      xhr.send(formData)
-      @
-    else # the file is bigger than the max chunk size, so we have to split it
-
-      # Calculate the number of chunks we should slice the file in
-      size = @uploadSettings.chunkSize
-      @currentFileSettings.numberOfChunks = Math.ceil file.size / size - 1
-      @currentFileSettings.file = file
-      @uploadChunk 0
+    # Calculate the number of chunks we should slice the file in
+    size = @uploadSettings.chunkSize
+    @currentFileSettings.numberOfChunks = Math.ceil file.size / size - 1
+    @currentFileSettings.file = file
+    @uploadChunk 0
 
     # Return this
     @
 
 
-  uploadChunk: (chunkIndex) =>
+  uploadChunk: (chunkIndex, tmpFilename = null) =>
     parent = @
+
+    # calculate the start and stop byte of the chunk
     start = chunkIndex * @uploadSettings.chunkSize
     stop = start + @uploadSettings.chunkSize
 
-    console.log chunkIndex
-
+    # slice the chunk
     blob = @currentFileSettings.file.slice start, stop
 
+    # Create the FileReader object
     reader = new FileReader
     reader.onloadend = (evt) ->
       if evt.target.readyState == FileReader.DONE
         formData = new FormData
-        formData.append 'data', evt.target.result, 'asdf'
+        formData.append 'data', blob
         formData.append 'name', parent.currentFileSettings.file.name
         formData.append 'type', parent.currentFileSettings.file.type
         formData.append 'chunkIndex', chunkIndex
+        formData.append 'tmpFilename', tmpFilename if tmpFilename != null
 
         xhr = new XMLHttpRequest
         xhr.onloadend = (event) ->
-          response = xhr.response
+          response = JSON.parse xhr.response
           console.log response
 
           if parent.currentFileSettings.numberOfChunks > chunkIndex
-            parent.uploadChunk ++chunkIndex
+            parent.uploadChunk ++chunkIndex, response.tmpFilename
+          else
+            parent.finishFileUpload tmpFilename
 
           @
         xhr.open 'POST', parent.uploadSettings.uploadScript, false
@@ -118,6 +103,33 @@ class window.Upload
 
     reader.readAsBinaryString blob
     @
+
+  finishFileUpload: (tmpFilename) =>
+  
+    formData = new FormData
+    formData.append 'action', 'finish'
+    formData.append 'tmpFilename', tmpFilename
+    formData.append 'filename', @currentFileSettings.file.name
+    
+    # move the tmpFolder file to the uploads folder
+    xhr = new XMLHttpRequest
+    xhr.onloadend = (event) ->
+      console.log xhr.response
+    xhr.open 'POST', @uploadSettings.uploadScript, false
+    xhr.send
+
+    # clean the currentFileSettings object
+    if @uploadSettings.currentFileIndex + 1 <= @uploadSettings.files.length - 1
+
+      # Increase by 1 the current file index
+      @uploadSettings.currentFileIndex = @uploadSettings.currentFileIndex + 1
+
+      # reset hte currentFileSettings object
+      @currentFileSettings =
+        file: {}
+        chunkIndex: 0
+        numberOfChunks: 0
+        tempName: null
 
   addFile: (file) =>
     @uploadSettings.files.push file
