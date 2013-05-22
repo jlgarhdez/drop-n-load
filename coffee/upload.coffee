@@ -35,9 +35,9 @@ class window.Upload
 
   constructor: (uploadSettings = null) ->
     if uploadSettings != null and
-       typeof uploadSettings.uploadScript isnt undefined and
-       typeof uploadSettings.uploadFolder isnt undefined and
-       typeof uploadSettings.tmpFolder isnt undefined
+       typeof uploadSettings.uploadScript isnt 'undefined' and
+       typeof uploadSettings.uploadFolder isnt 'undefined' and
+       typeof uploadSettings.tmpFolder isnt 'undefined'
 
       @uploadSettings = uploadSettings
 
