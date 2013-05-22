@@ -93,7 +93,7 @@ class window.Upload
           if parent.currentFileSettings.numberOfChunks > chunkIndex
             parent.uploadChunk ++chunkIndex, response.tmpFilename
           else
-            parent.finishFileUpload tmpFilename
+            parent.finishFileUpload response.tmpFilename
 
           @
         xhr.open 'POST', parent.uploadSettings.uploadScript, false

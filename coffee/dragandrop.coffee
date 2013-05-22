@@ -68,7 +68,7 @@ class window.DragAndDrop
     DragAndDrop.container.style.border = "none"
     @
 
-  # Method for processing each file 
+  # Method for processing each file
   proccessFile: (file) ->
     reader = new FileReader
 
@@ -93,6 +93,15 @@ class window.DragAndDrop
       filenameElement.innerHTML = file.name
 
       fileDiv.appendChild filenameElement
+
+      progressbar = document.createElement 'progress'
+      progressbar.setAttribute 'min', 0
+      progressbar.setAttribute 'max', 100
+      progressbar.setAttribute 'value', 0
+      progressbar.setAttribute 'id', file.name.replace 
+      progressbar.innerHTML = '0% complete'
+
+      fileDiv.appendChild progressbar
 
       DragAndDrop.container.appendChild fileDiv
 
