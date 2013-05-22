@@ -21,7 +21,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 class window.Upload
 
-  # This will contain all the convenience configuration for the upload class.
+  # This object contains all the convenience configuration for the upload class.
   @uploadSettings =
     uploadScript: 'serverScript.php'  # The script to send the data to. You can
                                       # use an URL here
@@ -33,17 +33,23 @@ class window.Upload
 
   @currentFileSettings = {}
 
-  constructor: (uploadSettings) ->
-    if typeof uploadSettings.uploadScript isnt undefined and
+  constructor: (uploadSettings = null) ->
+    if uploadSettings != null and
+       typeof uploadSettings.uploadScript isnt undefined and
        typeof uploadSettings.uploadFolder isnt undefined and
        typeof uploadSettings.tmpFolder isnt undefined
+
       @uploadSettings = uploadSettings
 
-      @currentFileSettings =
-        file: {}
-        chunkIndex: 0
-        numberOfChunks: 0
-        tempName: null
+    else
+
+      @uploadSettings = Upload.uploadSettings
+
+    @currentFileSettings =
+      file: {}
+      chunkIndex: 0
+      numberOfChunks: 0
+      tempName: null
 
   # This method will handle the upload of each file
   uploadFile: (fileIndex) =>
