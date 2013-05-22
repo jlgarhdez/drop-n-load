@@ -98,7 +98,8 @@ class Upload {
 
         if ($status) {
             unlink($this->tmpFolder . $src);
-            $response['status'] = $this->messages['file_moved_successfully'];
+            $response['status'] = 'ok';
+            $response['message'] = $this->messages['file_moved_successfully']; 
         }else{
             $response['status'] = $this->messages['unable_to_move_file'];
             $response['origin'] = $this->tmpFolder . $src;

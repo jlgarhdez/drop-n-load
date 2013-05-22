@@ -105,6 +105,8 @@ class window.Upload
 
   finishFileUpload: (tmpFilename) =>
 
+    parent = @
+
     formData = new FormData
     formData.append 'action', 'finish'
     formData.append 'tmpFilename', tmpFilename
@@ -113,7 +115,11 @@ class window.Upload
     # move the tmpFolder file to the uploads folder
     xhr = new XMLHttpRequest
     xhr.onloadend = (event) ->
-      console.log xhr.response
+      response = JSON.parse xhr.response
+      if response.status == 'ok'
+        currentFile = parent.currentFileSettings.file
+        fileDiv = document.getElementById currentFile.name.replace /[^a-z0-9]/gi, ''
+        fileDiv.setAttribute 'style', 'background-color: #5eb95e;'
       @
     xhr.open 'POST', @uploadSettings.uploadScript, false
     xhr.send formData

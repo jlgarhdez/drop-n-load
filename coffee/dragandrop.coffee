@@ -57,14 +57,14 @@ class window.DragAndDrop
     @
 
   # Drop handler
-  dropHandler: (event) ->
+  dropHandler: (event) =>
     event.preventDefault()
 
     # The array of files
     files = event.dataTransfer.files
 
     # loop through the array of files
-    DragAndDrop.prototype.proccessFile file for file in files
+    @proccessFile file for file in files
     DragAndDrop.container.style.border = "none"
     @
 
@@ -81,32 +81,23 @@ class window.DragAndDrop
       upload.addFile file
 
       fileDiv = document.createElement 'div'
+      fileDiv.setAttribute 'class', 'file'
+      fileDiv.setAttribute 'id', file.name.replace /[^a-z0-9]/gi, ''
 
+      # Checks if the file is an image to show a thumbnail
       if file.type.match 'image.*'
         imageElement = document.createElement 'img'
         imageElement.setAttribute 'src', dataUrl
         imageElement.setAttribute 'class', 'thumb'
-
         fileDiv.appendChild imageElement
 
       filenameElement = document.createElement 'span'
       filenameElement.innerHTML = file.name
 
       fileDiv.appendChild filenameElement
-
-      progressbar = document.createElement 'progress'
-      progressbar.setAttribute 'min', 0
-      progressbar.setAttribute 'max', 100
-      progressbar.setAttribute 'value', 0
-      progressbar.setAttribute 'id', file.name.replace 
-      progressbar.innerHTML = '0% complete'
-
-      fileDiv.appendChild progressbar
-
-      DragAndDrop.container.appendChild fileDiv
-
       placeholder =  document.getElementById DragAndDrop.settings.droppablePlaceholderId
 
+      DragAndDrop.container.appendChild fileDiv
       DragAndDrop.container.removeChild placeholder if placeholder isnt null
       @
 
