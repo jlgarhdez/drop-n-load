@@ -1,19 +1,19 @@
-Simple Upload
-=============
+Drop'n load
+===========
 
 > Disclaimer
 > This is a simple project whose principal purpose is learning Coffeescript.
 > I will try to mantain it, but only try.
 > BTW, this project is highly inspired by [BigUpload](https://github.com/sthielen/BigUpload)
 
-Simple upload is a drag and drop based upload helper. Is written in
+Drop'n load is a drag and drop based upload helper. Is written in
 Coffeescript, and the important files are in the `coffee/` dir. There are two
 coffee files:
 
 Configuration
 -------------
 ###index.html
-You can configure Simple-upload from index.html. Just create a new script tag
+You can configure Drop'n load from index.html. Just create a new script tag
 after including dragandrop.js and upload.js with the following:
 
 ```javascript
